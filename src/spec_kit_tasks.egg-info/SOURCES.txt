@@ -1,11 +1,16 @@
 README.md
 pyproject.toml
+src/__init__.py
 src/repl.py
+src/cli/__init__.py
 src/cli/main.py
+src/lib/__init__.py
 src/lib/color.py
 src/lib/dates.py
 src/lib/storage.py
+src/models/__init__.py
 src/models/task.py
+src/services/__init__.py
 src/services/task_service.py
 src/spec_kit_tasks.egg-info/PKG-INFO
 src/spec_kit_tasks.egg-info/SOURCES.txt

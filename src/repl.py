@@ -110,26 +110,33 @@ def cmd_list(args: list[str]) -> int:
 
 
 def cmd_complete(args: list[str]) -> int:
-    if len(args) != 1:
-        print("complete requires exactly one id", file=sys.stderr)
+    if not args:
+        print("complete requires at least one id", file=sys.stderr)
         return 2
+    ids = []
+    for arg in args:
+        try:
+            ids.append(int(arg))
+        except ValueError:
+            print(f"Invalid id: {arg}", file=sys.stderr)
+            return 2
     try:
-        disp_id = int(args[0])
-    except ValueError:
-        print("id must be an integer", file=sys.stderr)
-        return 2
-    try:
-        t = task_service.complete_task(disp_id)
-    except KeyError:
-        print(f"Task not found: {disp_id}", file=sys.stderr)
+        completed = task_service.complete_tasks(ids)
+    except KeyError as e:
+        print(f"Task not found: {e.args[0]}", file=sys.stderr)
         return 3
-    print(f"Task completed: {t.get('description')}")
+    if len(completed) == 1:
+        print(f"Task completed: {completed[0].get('description')}")
+    else:
+        print(f"Completed {len(completed)} tasks:")
+        for t in completed:
+            print(f"  - {t.get('description')}")
     return 0
 
 
 def cmd_help(_: list[str]) -> int:
     print(
-        """Commands:\n  add <description> [--deadline YYYY-MM-DD]\n  list [--json]\n  complete <display_id>\n  help | ?\n  exit | quit (or Ctrl-D)\n"""
+        """Commands:\n  add <description> [--deadline YYYY-MM-DD]\n  list [--json]\n  complete <display_id> [<display_id> ...]\n  help | ?\n  exit | quit (or Ctrl-D)\n"""
     )
     return 0
 
