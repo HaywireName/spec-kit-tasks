@@ -11,9 +11,6 @@ dependencies = [
 [project.scripts]
 task = "src.repl:main"
 
-[tool.setuptools.packages.find]
-include = ["src*"]
-
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
