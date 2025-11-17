@@ -11,6 +11,10 @@
 
 - Q: How should tasks be visually differentiated based on urgency? → A: Color-coded by deadline - overdue tasks in red, tasks due within 3 days in yellow, all other tasks in white
 - Q: Should there be a dedicated command to mark tasks as complete? → A: Yes, a "complete" command should remove finished tasks from the list
+- Q: Where should the task storage file be located? → A: Always in current working directory where CLI is executed
+- Q: What format should task identifiers use? → A: Sequential, consecutive numbers based on current display order (1, 2, 3...)
+- Q: When user doesn't provide a deadline, should the system prompt or use a default? → A: Allow tasks without deadlines, display them last in the list
+- Q: What should the storage file be named? → A: `.tasks.json` (hidden file with JSON extension)
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -26,7 +30,7 @@ Users need to capture tasks quickly with deadlines so they can track what needs 
 
 1. **Given** no existing tasks, **When** user adds a task "Write report" with deadline "2025-11-20", **Then** the task is stored with the correct description and deadline
 2. **Given** existing tasks in the system, **When** user adds a new task "Review code" with deadline "2025-11-18", **Then** the new task is added without affecting existing tasks
-3. **Given** user wants to add a task, **When** user provides task description but no deadline, **Then** system prompts for deadline or uses a reasonable default (e.g., today + 7 days)
+3. **Given** user wants to add a task, **When** user provides task description but no deadline, **Then** the task is stored without a deadline
 4. **Given** user provides an invalid deadline format, **When** attempting to add task, **Then** system displays clear error message with expected format example
 
 ---
@@ -46,8 +50,9 @@ Users need to see all their tasks ordered by urgency with visual color indicator
 3. **Given** a task due within 3 days from today, **When** user lists tasks, **Then** the task is displayed in yellow color
 4. **Given** a task due more than 3 days from today, **When** user lists tasks, **Then** the task is displayed in white color
 5. **Given** tasks with the same deadline, **When** user lists tasks, **Then** tasks with same deadline are displayed in creation order with the same color
-6. **Given** no tasks exist, **When** user lists tasks, **Then** system displays a friendly message like "No tasks found"
-7. **Given** tasks are listed, **When** display is shown, **Then** each task shows description, deadline, and relative time (e.g., "due in 2 days", "overdue by 1 day") with appropriate color
+6. **Given** tasks without deadlines exist, **When** user lists tasks, **Then** tasks without deadlines are displayed last (after all tasks with deadlines) in white color
+7. **Given** no tasks exist, **When** user lists tasks, **Then** system displays a friendly message like "No tasks found"
+8. **Given** tasks are listed, **When** display is shown, **Then** each task shows description, deadline (or "No deadline"), and relative time (e.g., "due in 2 days", "overdue by 1 day") with appropriate color
 
 ---
 
@@ -87,15 +92,15 @@ Users need to mark tasks as complete and remove them from the active list, keepi
 
 ### Functional Requirements
 
-- **FR-001**: System MUST provide a command to add a new task with description and deadline
-- **FR-002**: System MUST store tasks persistently in a local file between CLI sessions
-- **FR-003**: System MUST provide a command to list all tasks sorted by deadline (soonest first)
+- **FR-001**: System MUST provide a command to add a new task with description and optional deadline
+- **FR-002**: System MUST store tasks persistently in a file named `.tasks.json` in the current working directory between CLI sessions
+- **FR-003**: System MUST provide a command to list all tasks sorted by deadline (soonest first), with tasks without deadlines displayed last
 - **FR-004**: System MUST provide a command to complete a task by identifier, removing it from the list
 - **FR-005**: System MUST maintain logical separation between CLI interface and storage operations
 - **FR-006**: System MUST display tasks with human-readable relative time indicators (e.g., "due in 3 days", "overdue by 1 day")
 - **FR-007**: System MUST validate deadline format and provide clear error messages for invalid input
-- **FR-008**: System MUST handle missing or corrupted storage files gracefully (create new file if needed)
-- **FR-009**: System MUST assign unique identifiers to tasks for completion operations
+- **FR-008**: System MUST handle missing or corrupted `.tasks.json` files gracefully (create new file if needed)
+- **FR-009**: System MUST assign sequential numeric identifiers (1, 2, 3...) to tasks based on their display order for completion operations
 - **FR-010**: System MUST preserve task order by deadline when adding, completing, or listing tasks
 - **FR-011**: System MUST support standard date formats (ISO 8601 recommended: YYYY-MM-DD)
 - **FR-012**: System MUST display appropriate messages when no tasks exist
@@ -104,13 +109,16 @@ Users need to mark tasks as complete and remove them from the active list, keepi
 - **FR-015**: System MUST calculate urgency based on current date when list command is executed
 - **FR-016**: System MUST handle terminals that don't support color output gracefully (fallback to plain text)
 - **FR-017**: System MUST display confirmation message when a task is successfully completed
+- **FR-018**: System MUST display sequential numeric identifiers (starting at 1) next to each task when listing
+- **FR-019**: System MUST allow tasks to be created without deadlines (deadline is optional)
+- **FR-020**: System MUST display "No deadline" or similar indicator for tasks without deadlines
 
 ### Key Entities
 
 - **Task**: Represents a single item to be completed
-  - Unique identifier (for removal operations)
+  - Display identifier (sequential number 1, 2, 3... based on sorted order, recalculated each time list is displayed)
   - Description (text summary of what needs to be done)
-  - Deadline (date/time when task should be completed)
+  - Deadline (optional date/time when task should be completed; null/empty if not provided)
   - Creation timestamp (for secondary sorting and audit trail)
 
 - **Task Storage**: Manages persistence of tasks
@@ -121,16 +129,19 @@ Users need to mark tasks as complete and remove them from the active list, keepi
 
 ### Assumptions
 
-- Users will run CLI from a consistent working directory where the storage file can be located
-- Storage file format will be human-readable for debugging (JSON or similar structured format)
+- Storage file is always named `.tasks.json` and located in the current working directory where the CLI is executed (this allows different task lists per directory/project)
+- Storage file format is JSON for human-readability and easy debugging
+- Hidden file (dot prefix) reduces visual clutter in directory listings
 - Single-user system (no multi-user authentication or authorization needed)
 - Tasks are personal/local to the user's machine (no cloud sync or sharing)
-- Deadlines are date-only (not time-specific) unless otherwise specified
+- Deadlines are optional; when provided, they are date-only (not time-specific) unless otherwise specified
+- Tasks without deadlines are valid and useful for capturing ideas or non-time-sensitive work
 - System clock is reasonably accurate for relative time calculations and color determination
 - Terminal supports UTF-8 for task descriptions
 - Users have read/write permissions in the directory where storage file resides
 - Most terminals support ANSI color codes, but system will gracefully degrade for non-color terminals
 - "Within 3 days" means tasks due in 3 days or fewer from current date (inclusive boundary)
+- Tasks without deadlines are displayed in white color (no urgency indicator)
 
 ## Success Criteria *(mandatory)*
 
