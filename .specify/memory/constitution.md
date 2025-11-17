@@ -1,17 +1,18 @@
 <!--
 Sync Impact Report:
-Version: 0.0.0 → 1.0.0 (Initial constitution)
-Ratified: 2025-11-17
-Modified Principles: N/A (Initial creation)
-Added Sections:
-  - Core Principles (4 principles)
-  - Code Quality Standards
-  - Development Workflow
-  - Governance
+Version: 1.0.0 → 1.1.0 (Documentation merge requirement)
+Last Amended: 2025-11-17
+Modified Sections:
+  - Code Review Requirements: Added user documentation merge gate
+  - Quality Checklist: Added user documentation verification
+  - Development Workflow: Clarified documentation must be complete before master merge
+Added Requirements:
+  - User documentation MUST be created and up-to-date before merging to master
+  - Documentation review mandatory in code review process
 Templates Status:
-  ✅ spec-template.md - Aligns with UX consistency and testing principles
-  ✅ plan-template.md - Aligns with constitution check requirement
-  ✅ tasks-template.md - Aligns with testing standards and implementation approach
+  ✅ spec-template.md - Already requires documentation
+  ✅ plan-template.md - Aligns with documentation requirements
+  ✅ tasks-template.md - Aligns with documentation standards
 Follow-up TODOs: None
 -->
 
@@ -53,6 +54,7 @@ Follow-up TODOs: None
 - [ ] Tests pass (all existing + new tests)
 - [ ] Code coverage meets minimum threshold
 - [ ] Documentation updated (if API changes)
+- [ ] User documentation created and up-to-date (required before merge to master)
 - [ ] No debug code, console.log, or TODO comments without linked issues
 
 **Rationale**: Quality gates catch bugs early, enforce consistency, and ensure code meets team standards automatically. Automated quality checks reduce review burden and prevent technical debt accumulation.
@@ -178,6 +180,22 @@ Be happy!
 - Reviewer MUST verify constitution compliance
 - Reviewer MUST verify test coverage and quality
 - Reviewer MUST verify documentation completeness
+- Reviewer MUST verify user documentation is created and up-to-date before merge to master
+
+### Documentation Merge Requirements (NON-NEGOTIABLE)
+**User documentation MUST be complete and current before any merge to master branch.**
+
+- User-facing documentation MUST be created for all new features
+- Existing documentation MUST be updated when feature behavior changes
+- Documentation MUST include:
+  - Clear description of feature purpose and usage
+  - Practical examples demonstrating common use cases
+  - Edge cases and error handling guidance
+  - Breaking changes and migration instructions (if applicable)
+- Documentation changes MUST be reviewed as part of code review process
+- Missing or outdated documentation BLOCKS merge to master (exceptions require explicit justification)
+
+**Rationale**: Out-of-date documentation creates user frustration, increases support burden, and undermines trust in the product. Enforcing documentation completeness at merge time ensures users always have accurate information.
 
 ### Complexity Justification
 - Any violation of constitution principles MUST be justified in plan.md complexity tracking table
@@ -221,4 +239,4 @@ When making technical decisions, consider in order:
 4. **Is this consistent with existing patterns?** → If no, justify divergence
 5. **Will users understand this?** → If no, improve clarity or documentation
 
-**Version**: 1.0.0 | **Ratified**: 2025-11-17 | **Last Amended**: 2025-11-17
+**Version**: 1.1.0 | **Ratified**: 2025-11-17 | **Last Amended**: 2025-11-17
