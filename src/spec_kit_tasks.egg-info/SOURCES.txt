@@ -1,0 +1,15 @@
+README.md
+pyproject.toml
+src/repl.py
+src/cli/main.py
+src/lib/color.py
+src/lib/dates.py
+src/lib/storage.py
+src/models/task.py
+src/services/task_service.py
+src/spec_kit_tasks.egg-info/PKG-INFO
+src/spec_kit_tasks.egg-info/SOURCES.txt
+src/spec_kit_tasks.egg-info/dependency_links.txt
+src/spec_kit_tasks.egg-info/entry_points.txt
+src/spec_kit_tasks.egg-info/requires.txt
+src/spec_kit_tasks.egg-info/top_level.txt

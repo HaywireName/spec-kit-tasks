@@ -1,3 +1,11 @@
+Metadata-Version: 2.4
+Name: spec-kit-tasks
+Version: 0.1.0
+Summary: Simple CLI to add, list (color-coded), and complete tasks stored in .tasks.json
+Requires-Python: >=3.14
+Description-Content-Type: text/markdown
+Requires-Dist: colorama>=0.4.6
+
 # spec-kit-tasks
 
 A simple task management CLI to add, list (color-coded), and complete tasks stored locally in `.tasks.json`.

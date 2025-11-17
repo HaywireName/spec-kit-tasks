@@ -12,5 +12,26 @@
     "deadline": null,
     "created_at": "2025-11-17T20:21:26Z",
     "completed": false
+  },
+  {
+    "id": "ea185d72-3608-4928-86fc-a651c3e3ecc1",
+    "description": "Test task",
+    "deadline": null,
+    "created_at": "2025-11-17T22:42:01Z",
+    "completed": false
+  },
+  {
+    "id": "b02d166d-34e5-4731-b3ce-d0232da055ce",
+    "description": "Verification task",
+    "deadline": null,
+    "created_at": "2025-11-17T22:42:45Z",
+    "completed": false
+  },
+  {
+    "id": "383b1441-718d-478a-96c3-e116953b5e67",
+    "description": "REPL test",
+    "deadline": null,
+    "created_at": "2025-11-17T22:53:00Z",
+    "completed": false
   }
 ]
